@@ -3,7 +3,7 @@ import shutil
 
 class my_file_tools:
     '''
-    这个类封装了一些列本项目中需要的文件处理手段
+    这个类封装了一些本项目中需要的文件处理手段
     '''
     def __init__(self) -> None:
         pass
