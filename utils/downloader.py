@@ -1,0 +1,75 @@
+import threading 
+from colorama import Fore, Style  # 骚气的输出，用来强调warning信息
+from utils.requests import my_requests
+from utils.file_tools import file_tools, my_file_tools
+
+
+
+class my_downloader:
+    def __init__(self) -> None:
+        self.url          : str  = None
+        self.proxies      : dict = None
+        self.tmp_dir      : str  = None  # 临时文件夹 (存放着多线程下载得到的file segments)
+        self.target_dir   : str  = None  # 目标文件夹 (合并后的下载文件存放目录)
+        self.file_name    : str  = None  # 目标文件名 (合并后的下载文件名)
+        self.thread_number: int  = None  # 多线程下载中的线程个数，在server的config文件中声明
+
+    def _multi_thread_download(self, download_list) -> None:
+        '''
+        工具函数（不对外暴露）
+        负责多线程下载, 第i个线程下载的文件为`${tmp_dir}/segment_by_thread_${i}`
+        '''
+        for thread_id in range(self.thread_number):
+            # calling Downloader.download_range() for each thread
+            t = threading.Thread(target=my_requests().partial_request,
+                kwargs={
+                'url': self.url,
+                'proxies': self.proxies,
+                'target_dir': self.tmp_dir + 'segment_by_thread_' + str(thread_id),
+                'left_point': None, # TODO
+                'left_point': None, # TODO
+                })
+            t.setDaemon(True)
+            t.start()   
+        main_thread = threading.current_thread()
+        for each in threading.enumerate():
+            if each is main_thread:
+                continue
+            each.join()  
+
+    def _merge_file_segments(self) -> None:
+        '''
+        工具函数（不对外暴露）
+        负责合并多线程下载得到的file segments, 并将文件存为${target_dir}/${file_name}
+        '''
+        with open(self.target_dir + '/' + self.file_name, mode='wb') as target_file:
+            file_segments_list = [self.tmp_dir + 'segment_by_thread_' + str(thread_id) for thread_id in range(self.thread_number)]
+            my_file_tools().append_file(file_segments_list, target_file)   
+            for file_segment in file_segments_list:
+                my_file_tools().delete_file(file_segment)
+
+    def download(self, url: str, tmp_dir: str, target_dir: str, left_point: int, right_point: int, proxies: dict = None):
+        '''
+        唯一的对外接口，由distributed-server调用，负责下载文件片段，
+        对于该片段，在支持多线程下载时采用多线程下载，不支持时采用单线程下载
+        '''
+        self.url        = url
+        self.proxies    = proxies
+        self.tmp_dir    = tmp_dir
+        self.target_dir = target_dir
+
+        if my_requests().partial_supported(url, proxies) == True:
+            # 多线程下载
+            # TODO: download_list = ?
+            download_list = []
+            self._multi_thread_download(download_list)
+            self._merge_file_segments()
+        else:
+            # 单线程下载
+            print(Fore.CYAN, "Multi-threaded downloading is not supported by ",
+                  url, ".\nDownloading will be single-threaded.", Style.RESET_ALL)
+            my_requests.partial_request(url=url,
+                                        left_point=left_point,
+                                        right_point=right_point,
+                                        file_path=target_dir,
+                                        proxies=proxies)
