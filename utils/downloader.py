@@ -80,6 +80,6 @@ class my_downloader:
             self._merge_file_segments()
         else:
             # 单线程下载
-            print(Fore.CYAN, "Multi-threaded downloading is not supported by ",
+            print(Fore.RED, "Multi-threaded downloading is not supported by ",
                   url, ".\nDownloading will be single-threaded.", Style.RESET_ALL)
             self._single_thread_download(url=url)
