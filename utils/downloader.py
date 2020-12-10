@@ -1,5 +1,4 @@
 import threading
-import sys
 from colorama import Fore, Style  # 骚气的输出，用来强调warning信息
 from utils.requests import my_requests
 from utils.file_tools import my_file_tools
