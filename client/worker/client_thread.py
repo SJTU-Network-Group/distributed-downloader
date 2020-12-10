@@ -10,8 +10,7 @@ class client_thread(threading.Thread):
 
     def __init__(self,
                  port: int,                       # socket端口
-                 # 此thread请求的片段文件在http(s)响应体中的的比特区间
-                 download_interval: list[int],
+                 download_interval: list[int],    # 此thread请求的片段文件在http(s)响应体中的的比特区间
                  server_addr_ipv4: str,           # 此thread连接的server的ipv4地址
                  url: str,                        # 下载链接
                  file_path: str                   # 下载好的(片段)文件存储地址
