@@ -5,8 +5,8 @@ class my_requests:
     def __init__(self) -> None:
         pass
 
-    @classmethod
-    def request(cls, url: str, proxies: dict = None, timeout: int = 5):
+    @staticmethod
+    def request(url: str, proxies: dict = None, timeout: int = 5):
         resp = requests.Session.request(
             method='GET', url=url, proxies=proxies, timeout=timeout)
         return resp
@@ -22,8 +22,8 @@ class my_requests:
         partial_supported = 'Accept-Ranges' in resp.headers and resp.headers['Accept-Ranges'] == 'bytes'
         return partial_supported
 
-    @classmethod
-    def partial_request(cls, url: str, left_point: int, right_point: int, file_path: str, proxies: dict = None, timeout=5) -> None:
+    @staticmethod
+    def partial_request(url: str, left_point: int, right_point: int, file_path: str, proxies: dict = None, timeout=5) -> None:
         '''
         此函数将被多线程执行，负责将${url}的[${left_point}, ${right_point}]比特下载为${file_path}
         '''
