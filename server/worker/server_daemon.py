@@ -27,12 +27,12 @@ class server_daemon:
         self.socket.listen(5)
         print(f"listening on {self.server_addr_ipv4}:{self.server_port}...")
         while True:
-            client_socket, client_addr_tuple = self.socket.accept()
+            conn_socket, client_addr_tuple = self.socket.accept()
             _server_thread = server_thread(
                 tmp_dir=self.tmp_dir,
                 thread_number=self.thread_number,
                 proxies=self.proxies,
-                client_socket=client_socket,
+                conn_socket=conn_socket,
                 client_addr_tuple=client_addr_tuple
             )
             _server_thread.start()

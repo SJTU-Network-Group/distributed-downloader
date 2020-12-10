@@ -8,15 +8,14 @@ class server_thread(threading.Thread):
                  tmp_dir: str,
                  thread_number: int, 
                  proxies: dict,
-                 client_socket: socket.socket, 
+                 conn_socket: socket.socket, 
                  client_addr_tuple :tuple
                 ) -> None:
-        self.socket = client_socket
+        self.socket = conn_socket
         self.client_addr_tuple = client_addr_tuple
         self.thread_number = thread_number
         self.proxies = proxies
         self.tmp_dir = tmp_dir
 
     def run(self) -> None:
-        # TODO:
-        pass
+        
