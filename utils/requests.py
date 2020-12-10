@@ -15,6 +15,8 @@ class my_requests:
             resp = self.request(url=url, proxies=proxies)
         elif response != None:
             resp = response
+        else:
+            return False
         partial_supported = 'Accept-Ranges' in resp.headers and resp.headers['Accept-Ranges'] == 'bytes'
         return partial_supported
 
