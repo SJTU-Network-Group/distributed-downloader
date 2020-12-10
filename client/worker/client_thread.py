@@ -23,6 +23,7 @@ class client_thread(threading.Thread):
         self.file_path = file_path
         # initialize socket
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     def run(self) -> None:
         print(

@@ -62,7 +62,7 @@ class my_downloader:
             for file_segment in file_segments_list:
                 my_file_tools.delete_file(file_segment)
 
-    def download(self, url: str, tmp_dir: str, target_dir: str, left_point: int, right_point: int, proxies: dict = None) -> None:
+    def download(self, url: str, tmp_dir: str, target_dir: str, file_name: str, left_point: int, right_point: int, proxies: dict = None) -> None:
         """
         唯一的对外接口，由distributed-server调用，负责下载文件片段，
         对于该片段，在支持多线程下载时采用多线程下载，不支持时采用单线程下载
@@ -71,7 +71,7 @@ class my_downloader:
         self.proxies = proxies
         self.tmp_dir = tmp_dir
         self.target_dir = target_dir
-
+        self.file_name = file_name
         if my_requests.partial_supported(url, proxies) == True:
             # 多线程下载
             download_interval_list = my_distributer.download_interval_for_threads(
