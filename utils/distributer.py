@@ -1,11 +1,13 @@
 import sys
 from colorama import Fore, Style
 
+
 class my_distributer:
     def __init__(self) -> None:
         pass
 
-    def download_interval_for_threads(self, left_point, right_point, thread_number) -> list[list]:
+    @classmethod
+    def download_interval_for_threads(cls, left_point, right_point, thread_number) -> list[list]:
         '''
         此函数将[left_point, right_point]区间分为thread_number块，并返回list[thread_number][2]
         '''
@@ -25,17 +27,11 @@ class my_distributer:
                     break
         for i in range(1, thread_number):
             size_list[i] += size_list[i - 1]
-        interval_list = [[0] * 2 for _ in range(thread_number)] 
+        interval_list = [[0] * 2 for _ in range(thread_number)]
         for i in range(thread_number):
             if i == 0:
                 interval_list[i][1] = size_list[0] - 1
             else:
                 interval_list[i][0] = size_list[i-1]
                 interval_list[i][1] = size_list[i] - 1
-        return interval_list    
-            
-
-
-
-
-     
+        return interval_list
