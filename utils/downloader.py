@@ -15,10 +15,10 @@ class my_downloader:
         self.thread_number: int = None  # 多线程下载中的线程个数，在server的config文件中声明
 
     def _single_thread_download(self) -> None:
-        '''
+        """
         工具函数（不对外暴露）
         负责单线程下载，用于多线程下载不被支持时
-        '''
+        """
         my_requests.partial_request(url=self.url,
                                     left_point=self.left_point,
                                     right_point=self.right_point,
@@ -26,10 +26,10 @@ class my_downloader:
                                     proxies=self.proxies)
 
     def _multi_thread_download(self, download_interval_list) -> None:
-        '''
+        """
         工具函数（不对外暴露）
         负责多线程下载, 第i个线程下载的文件为`${tmp_dir}segment_by_thread_${i}`
-        '''
+        """
         for thread_id in range(self.thread_number):
             t = threading.Thread(target=my_requests.partial_request,
                                  kwargs={
@@ -51,10 +51,10 @@ class my_downloader:
             each.join()
 
     def _merge_file_segments(self) -> None:
-        '''
+        """
         工具函数（不对外暴露）
         负责合并多线程下载得到的file segments, 并将文件存为${target_dir}${file_name}
-        '''
+        """
         with open(self.target_dir + self.file_name, mode='wb') as target_file:
             file_segments_list = [self.tmp_dir + 'segment_by_thread_' +
                                   str(thread_id) for thread_id in range(self.thread_number)]
@@ -63,10 +63,10 @@ class my_downloader:
                 my_file_tools.delete_file(file_segment)
 
     def download(self, url: str, tmp_dir: str, target_dir: str, left_point: int, right_point: int, proxies: dict = None) -> None:
-        '''
+        """
         唯一的对外接口，由distributed-server调用，负责下载文件片段，
         对于该片段，在支持多线程下载时采用多线程下载，不支持时采用单线程下载
-        '''
+        """
         self.url = url
         self.proxies = proxies
         self.tmp_dir = tmp_dir

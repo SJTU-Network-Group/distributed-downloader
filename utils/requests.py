@@ -24,9 +24,9 @@ class my_requests:
 
     @staticmethod
     def partial_request(url: str, left_point: int, right_point: int, file_path: str, proxies: dict = None, timeout=5) -> None:
-        '''
+        """
         此函数将被多线程执行，负责将${url}的[${left_point}, ${right_point}]比特下载为${file_path}
-        '''
+        """
         resp = requests.Session().request(method="GET",
                                           url=url,
                                           proxies=proxies,

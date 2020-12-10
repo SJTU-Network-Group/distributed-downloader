@@ -8,9 +8,9 @@ class my_distributer:
 
     @staticmethod
     def download_interval_for_threads(left_point, right_point, thread_number) -> list[list]:
-        '''
+        """
         此函数将[left_point, right_point]区间分为thread_number块，并返回list[thread_number][2]
-        '''
+        """
         length = right_point - left_point + 1
         if length < thread_number:
             #! error - 线程数大于文件大小，以至于无法分块
