@@ -92,7 +92,7 @@ class server_daemon:
             print(Fore.GREEN, "succeed -> ",
                 Style.RESET_ALL, "connection established")
 
-            # 发送消息，表示上线
+            # 发送消息，表示下线
             print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
                 f"send 'server down' to manager: {manager_addr_ipv4}:{str(manager_port)}...")
             to_manager_socket.send("server_down".encode())
