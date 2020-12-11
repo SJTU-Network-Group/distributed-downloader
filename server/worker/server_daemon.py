@@ -31,7 +31,7 @@ class server_daemon:
     def listen_for_client(self) -> None:
         self.socket.listen(5)
         print(
-            f"listening on {self.server_addr_ipv4}:{str(self.server_port)}...")
+            f"listening on {self.server_addr_ipv4}:{str(self.to_client_port)}...")
         while True:
             conn_socket, client_addr_tuple = self.socket.accept()
             print(Fore.GREEN, "\nsucceed -> ", Style.RESET_ALL,
@@ -53,7 +53,7 @@ class server_daemon:
         # 初始化连接到manager的socket
         to_manager_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         to_manager_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        to_manager_socket.bind((self.server_addr_ipv4, self.to_client_port))
+        to_manager_socket.bind((self.server_addr_ipv4, self.to_manager_port))
 
         # 连接到manager
         print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
