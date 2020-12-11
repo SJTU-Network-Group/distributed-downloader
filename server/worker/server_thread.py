@@ -57,14 +57,10 @@ class server_thread(threading.Thread):
         self.send_file_segment(self.target_dir + file_name)
 
         # 关闭socket
-        self.socket.shutdown(socket.SHUT_RDWR)
-        self.socket.close()
-        print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
-              f"socket to : {self.client_addr_tuple[0]}:{str(self.client_addr_tuple[1])} closed!")
+        self.close_connection()
 
         # 删除文件
-        my_file_tools.delete_file(self.target_dir + file_name)
-        print(Fore.GREEN, "succeed -> ", Style.RESET_ALL, "file segment deleted")
+        self.delete_file()
 
     def send_file_segment(self, file_path: str):
         with open(file_path, mode='rb') as rf:
@@ -74,3 +70,14 @@ class server_thread(threading.Thread):
                 buffer = rf.read(2048)
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
               f"file segment sent to client: {self.client_addr_tuple[0]}:{str(self.client_addr_tuple[1])}!")
+
+    def close_connection(self) -> None:
+        self.socket.shutdown(socket.SHUT_RDWR)
+        self.socket.close()
+        print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
+              f"socket to : {self.client_addr_tuple[0]}:{str(self.client_addr_tuple[1])} closed!")
+
+    
+    def delete_file(self) -> None:
+        my_file_tools.delete_file(self.target_dir + file_name)
+        print(Fore.GREEN, "succeed -> ", Style.RESET_ALL, "file segment deleted")
