@@ -84,7 +84,7 @@ class my_downloader:
         self.proxies = proxies
         if my_requests.partial_supported(url, proxies) == True:
             # 多线程下载
-            download_interval_list = my_distributer.download_interval_for_threads(
+            download_interval_list = my_distributer.download_interval_list(
                 left_point, right_point, self.thread_number)
             self._multi_thread_download(download_interval_list)
             self._merge_file_segments()
