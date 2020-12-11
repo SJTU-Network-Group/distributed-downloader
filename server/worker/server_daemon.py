@@ -76,31 +76,31 @@ class server_daemon:
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL, "disconnected")
 
     def tell_manager_server_down(self, manager_addr_ipv4: str, manager_port: int) -> None:
-            """
-            这个函数负责： server向manager通报自己的ipv4_ip以及port, 并表示自己下线了
-            """
+        """
+        这个函数负责： server向manager通报自己的ipv4_ip以及port, 并表示自己下线了
+        """
 
-            # 初始化连接到manager的socket
-            to_manager_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            to_manager_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            to_manager_socket.bind((self.server_addr_ipv4, self.to_client_port))
+        # 初始化连接到manager的socket
+        to_manager_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        to_manager_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        to_manager_socket.bind((self.server_addr_ipv4, self.to_client_port))
 
-            # 连接到manager
-            print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
-                f"connect to manager: {manager_addr_ipv4}:{str(manager_port)}...")
-            to_manager_socket.connect((manager_addr_ipv4, manager_port))
-            print(Fore.GREEN, "succeed -> ",
-                Style.RESET_ALL, "connection established")
+        # 连接到manager
+        print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
+              f"connect to manager: {manager_addr_ipv4}:{str(manager_port)}...")
+        to_manager_socket.connect((manager_addr_ipv4, manager_port))
+        print(Fore.GREEN, "succeed -> ",
+              Style.RESET_ALL, "connection established")
 
-            # 发送消息，表示下线
-            print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
-                f"send 'server down' to manager: {manager_addr_ipv4}:{str(manager_port)}...")
-            to_manager_socket.send("server_down".encode())
-            print(Fore.GREEN, "succeed -> ", Style.RESET_ALL, "sent")
+        # 发送消息，表示下线
+        print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
+              f"send 'server down' to manager: {manager_addr_ipv4}:{str(manager_port)}...")
+        to_manager_socket.send("server_down".encode())
+        print(Fore.GREEN, "succeed -> ", Style.RESET_ALL, "sent")
 
-            # 消息发送完成，关闭连接，销毁socket
-            print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
-                f"disconnect from: {manager_addr_ipv4}:{str(manager_port)}...")
-            to_manager_socket.shutdown(socket.SHUT_RDWR)
-            to_manager_socket.close()
-            print(Fore.GREEN, "succeed -> ", Style.RESET_ALL, "disconnected")
+        # 消息发送完成，关闭连接，销毁socket
+        print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
+              f"disconnect from: {manager_addr_ipv4}:{str(manager_port)}...")
+        to_manager_socket.shutdown(socket.SHUT_RDWR)
+        to_manager_socket.close()
+        print(Fore.GREEN, "succeed -> ", Style.RESET_ALL, "disconnected")
