@@ -65,7 +65,7 @@ class server_daemon:
         # 发送消息，表示上线
         print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
               f"send 'server up' to manager: {manager_addr_ipv4}:{str(manager_port)}...")
-        to_manager_socket.send("server_up".encode())
+        to_manager_socket.sendall("server_up".encode())
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL, "sent")
 
         # 消息发送完成，关闭连接，销毁socket
@@ -95,7 +95,7 @@ class server_daemon:
         # 发送消息，表示下线
         print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
               f"send 'server down' to manager: {manager_addr_ipv4}:{str(manager_port)}...")
-        to_manager_socket.send("server_down".encode())
+        to_manager_socket.sendall("server_down".encode())
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL, "sent")
 
         # 消息发送完成，关闭连接，销毁socket
