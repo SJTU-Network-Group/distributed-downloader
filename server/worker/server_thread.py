@@ -17,6 +17,7 @@ class server_thread(threading.Thread):
                  conn_socket: socket.socket,
                  client_addr_tuple: tuple
                  ) -> None:
+        threading.Thread.__init__(self)
         self.tmp_dir = tmp_dir
         self.target_dir = target_dir
         self.thread_number = thread_number
