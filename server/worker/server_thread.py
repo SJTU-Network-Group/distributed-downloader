@@ -88,7 +88,7 @@ class server_thread(threading.Thread):
 
     def close_connection(self) -> None:
         print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
-              f"disconnect to: {self.client_addr_tuple[0]}:{str(self.client_addr_tuple[1])}...")
+              f"disconnect from: {self.client_addr_tuple[0]}:{str(self.client_addr_tuple[1])}...")
         self.socket.shutdown(socket.SHUT_RDWR)
         self.socket.close()
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
