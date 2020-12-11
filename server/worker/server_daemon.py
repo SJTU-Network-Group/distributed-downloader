@@ -35,7 +35,7 @@ class server_daemon:
         while True:
             conn_socket, client_addr_tuple = self.socket.accept()
             print(Fore.GREEN, "\nsucceed -> ", Style.RESET_ALL,
-                  f"connected to client: {client_addr_tuple[0]}:{str(client_addr_tuple[1])!}")
+                  f"connected to client: {client_addr_tuple[0]}:{str(client_addr_tuple[1])}")
             _server_thread = server_thread(
                 tmp_dir=self.tmp_dir,
                 thread_number=self.thread_number,
