@@ -40,3 +40,7 @@ class my_requests:
                 if chunk:
                     wf.write(chunk)
         resp.close()
+
+    @staticmethod
+    def close_request(response: requests.Response):
+        response.close()

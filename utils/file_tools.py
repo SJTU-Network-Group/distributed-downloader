@@ -22,3 +22,8 @@ class my_file_tools:
     def delete_file(path: str) -> None:
         # 删除path指定的文件
         os.remove(path)
+
+    @staticmethod
+    def create_dir(dirname: str):
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
