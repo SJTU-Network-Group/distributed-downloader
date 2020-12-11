@@ -2,7 +2,7 @@ import sys
 from colorama import Fore, Style
 
 
-class my_distributer:
+class MyDistributor:
     def __init__(self) -> None:
         pass
 
@@ -13,7 +13,7 @@ class my_distributer:
         """
         length = right_point - left_point + 1
         if length < number_of_parts:
-            #! error - 分快数大于文件大小，以至于无法分块
+            # error - 分快数大于文件大小，以至于无法分块
             print(Fore.RED, "error -> ", Style.RESET_ALL, "number of parts > file size")
             sys.exit(0)
         base_interval = length // number_of_parts
@@ -35,4 +35,3 @@ class my_distributer:
                 interval_list[i][0] = size_list[i-1]
                 interval_list[i][1] = size_list[i] - 1
         return interval_list
-

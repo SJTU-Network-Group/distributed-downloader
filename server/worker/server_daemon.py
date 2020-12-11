@@ -1,9 +1,9 @@
 import socket
 from colorama import Fore, Style
-from server.worker import server_thread
+from server.worker.server_thread import ServerThread
 
 
-class server_daemon:
+class ServerDaemon:
     def __init__(self,
                  server_addr_ipv4: str,  # 本机的ipv4地址
                  to_client_port: int,   # 与client的socket的通信端口
@@ -29,15 +29,16 @@ class server_daemon:
         self.to_client_socket.bind((server_addr_ipv4, to_client_port))
 
     def listen_for_client(self) -> None:
-        self.socket.listen(5)
+        self.to_client_socket.listen(5)
         print(
             f"listening on {self.server_addr_ipv4}:{str(self.to_client_port)}...")
         while True:
-            conn_socket, client_addr_tuple = self.socket.accept()
+            conn_socket, client_addr_tuple = self.to_client_socket.accept()
             print(Fore.GREEN, "\nsucceed -> ", Style.RESET_ALL,
                   f"connected to client: {client_addr_tuple[0]}:{str(client_addr_tuple[1])}")
-            _server_thread = server_thread(
+            _server_thread = ServerThread(
                 tmp_dir=self.tmp_dir,
+                target_dir=self.target_dir,
                 thread_number=self.thread_number,
                 proxies=self.proxies,
                 conn_socket=conn_socket,

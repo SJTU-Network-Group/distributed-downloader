@@ -4,11 +4,11 @@ import uuid       # 生成唯一的下载文件名
 import threading
 from colorama import Fore, Style
 from pprint import pprint
-from utils.downloader import my_downloader
-from utils.file_tools import my_file_tools  # 传输完成后删除服务端文件
+from utils.downloader import MyDownloader
+from utils.file_tools import MyFileTools  # 传输完成后删除服务端文件
 
 
-class server_thread(threading.Thread):
+class ServerThread(threading.Thread):
     def __init__(self,
                  tmp_dir: str,
                  target_dir: str,
@@ -26,7 +26,7 @@ class server_thread(threading.Thread):
         self.client_addr_tuple = client_addr_tuple
 
         self.meta_data = None
-        self.file_path: str = None  # 下载好的file segment的路径+文件名
+        self.file_path: str = ''  # 下载好的file segment的路径+文件名
 
     def run(self) -> None:
         # 接受meta-data:
@@ -50,7 +50,7 @@ class server_thread(threading.Thread):
             print(Fore.RED, "error -> ", Style.RESET_ALL, "meta-data corrupted!")
             sys.exit(0)
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
-              "meta-data has been recieved!")
+              "meta-data has been received!")
         pprint(self.meta_data)
 
     def download_file_segment(self) -> None:
@@ -63,15 +63,15 @@ class server_thread(threading.Thread):
         # 阻塞，直到下载结束，下载好的文件路径为`target_dir + file_name`
         print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
               f"download file segment [{left_point}B,{right_point}B] from: {url}...")
-        my_downloader().download(url=url,
-                                 tmp_dir=self.tmp_dir,
-                                 target_dir=self.target_dir,
-                                 file_name=file_name,
-                                 left_point=left_point,
-                                 right_point=right_point,
-                                 thread_number=self.thread_number,
-                                 proxies=self.proxies
-                                 )
+        MyDownloader().download(url=url,
+                                tmp_dir=self.tmp_dir,
+                                target_dir=self.target_dir,
+                                file_name=file_name,
+                                left_point=left_point,
+                                right_point=right_point,
+                                thread_number=self.thread_number,
+                                proxies=self.proxies
+                                )
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
               "file segment has been downloaded!")
 
@@ -97,6 +97,6 @@ class server_thread(threading.Thread):
     def delete_file(self) -> None:
         print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
               f"delete file segment: {self.file_path}...")
-        my_file_tools.delete_file(self.file_path)
+        MyFileTools.delete_file(self.file_path)
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
               "file segment has been deleted")

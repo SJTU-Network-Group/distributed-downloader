@@ -3,7 +3,7 @@ import threading
 from colorama import Fore, Style
 
 
-class client_thread(threading.Thread):
+class ClientThread(threading.Thread):
     """
     this class provides interface to connect to server thread and download file segment
     """
@@ -47,9 +47,7 @@ class client_thread(threading.Thread):
               "connection established")
 
     def send_meta_data(self) -> None:
-        download_meta_data = {}
-        download_meta_data["url"] = self.url
-        download_meta_data["download_interval"] = self.download_interval
+        download_meta_data = {"url": self.url, "download_interval": self.download_interval}
         message: bytes = str(download_meta_data).encode()
         # 阻塞，直至发送成功
         print(Fore.YELLOW, f"\nthread-{str(self.thread_id)} trying -> ", Style.RESET_ALL,
@@ -78,4 +76,3 @@ class client_thread(threading.Thread):
         self.socket.close()
         print(Fore.GREEN, f"thread-{str(self.thread_id)} succeed -> ", Style.RESET_ALL,
               "disconnected")
-

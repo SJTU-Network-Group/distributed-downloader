@@ -2,7 +2,7 @@ import os
 import shutil
 
 
-class my_file_tools:
+class MyFileTools:
     """
     这个类封装了一些本项目中需要的文件处理手段
     """
@@ -16,11 +16,10 @@ class my_file_tools:
         with open(tar_path, mode='wb') as wf:
             for src_path in src_path_list:
                 with open(src_path, mode='rb') as rf:
-                    shutil.copyfileobj(src_path, tar_path)
+                    shutil.copyfileobj(rf, wf)
 
     @staticmethod
     def delete_file(path: str) -> None:
-        # 删除path指定的文件
         os.remove(path)
 
     @staticmethod

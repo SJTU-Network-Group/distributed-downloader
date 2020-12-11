@@ -1,7 +1,7 @@
 import requests
 
 
-class my_requests:
+class MyRequests:
     def __init__(self) -> None:
         pass
 
@@ -13,9 +13,9 @@ class my_requests:
 
     @classmethod
     def partial_supported(cls, url: str = None, proxies: dict = None, response: requests.Response = None) -> bool:
-        if url != None:
+        if url is not None:
             resp = cls().request(url=url, proxies=proxies)
-        elif response != None:
+        elif response is not None:
             resp = response
         else:
             return False
