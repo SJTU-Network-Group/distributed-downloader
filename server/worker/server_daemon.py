@@ -98,18 +98,9 @@ class server_daemon:
         to_manager_socket.send("server_down".encode())
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL, "sent")
 
-<<<<<<< HEAD
-            # 消息发送完成，关闭连接，销毁socket
-            print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
-                f"disconnect from: {manager_addr_ipv4}:{str(manager_port)}...")
-            to_manager_socket.shutdown(socket.SHUT_RDWR)
-            to_manager_socket.close()
-            print(Fore.GREEN, "succeed -> ", Style.RESET_ALL, "disconnected")
-=======
         # 消息发送完成，关闭连接，销毁socket
         print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
               f"disconnect from: {manager_addr_ipv4}:{str(manager_port)}...")
         to_manager_socket.shutdown(socket.SHUT_RDWR)
         to_manager_socket.close()
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL, "disconnected")
->>>>>>> a2c4b3e025d947587790f9b6b5041f072c8ab41e
