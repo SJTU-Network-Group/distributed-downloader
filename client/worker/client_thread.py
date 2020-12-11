@@ -10,7 +10,8 @@ class client_thread(threading.Thread):
 
     def __init__(self,
                  port: int,                       # socket端口
-                 download_interval: list[int],    # 此thread请求的片段文件在http(s)响应体中的的比特区间
+                 # 此thread请求的片段文件在http(s)响应体中的的比特区间
+                 download_interval: tuple[int],
                  server_addr_ipv4: str,           # 此thread连接的server的ipv4地址
                  url: str,                        # 下载链接
                  file_path: str                   # 下载好的(片段)文件存储地址
@@ -35,23 +36,26 @@ class client_thread(threading.Thread):
         download_meta_data = {}
         download_meta_data["url"] = self.url
         download_meta_data["download_interval"] = self.download_interval
-        # 编码为二进制格式，才能用sendall发送
         message: bytes = str(download_meta_data).encode()
-        self.socket.sendall(message)  # 阻塞，直至发送成功
+        # 阻塞，直至发送成功
+        self.socket.sendall(message)  
         print(
             Fore.GREEN, f"Download meta-data sent to server:{self.server_addr_ipv4}:{self.port} successfully !", Style.RESET_ALL)
-        self.receive_file_segments(self.file_path)
+        # 开始接受文件
+        self.receive_file_segment(self.file_path)
         self.close_connection()
 
     def receive_file_segment(self, file_path: str) -> None:
         buffer_size = 4096  # bytes
         print(
             Fore.CYAN, f"Start reciving file segment from server:{self.server_addr_ipv4}:{self.port}...", Style.RESET_ALL)
+        file_size = self.download_interval[1] - self.download_interval[0] + 1
+        # 可靠接受 - 阻塞，直到接受完成
         with open(file_path, mode='wb') as wf:
-            data_block = self.socket.recv(buffer_size)
-            while data_block != None:
-                wf.write(data_block)
+            while file_size > 0:
                 data_block = self.socket.recv(buffer_size)
+                wf.write(data_block)
+                file_size -= len(data_block)
         print(
             Fore.GREEN, f"Finish reciving file segment from server:{self.server_addr_ipv4}:{self.port}!", Style.RESET_ALL)
 

@@ -1,6 +1,5 @@
 import socket
 from time import thread_time
-from colorama import Fore, Style
 from server.worker import server_thread
 
 class server_daemon:

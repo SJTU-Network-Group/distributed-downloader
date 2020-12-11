@@ -8,12 +8,12 @@ from utils.distributer import my_distributer
 class my_downloader:
     def __init__(self) -> None:
         self.url: str = None
-        self.proxies: dict = None
         self.tmp_dir: str = None  # 临时文件夹 (存放着多线程下载得到的file segments)
         self.target_dir: str = None  # 目标文件夹 (合并后的下载文件存放目录)
         self.file_name: str = None  # 目标文件名 (合并后的下载文件名)
         self.thread_number: int = None  # 多线程下载中的线程个数，在server的config文件中声明
-
+        self.proxies: dict = None
+        
     def _single_thread_download(self) -> None:
         """
         工具函数（不对外暴露）
@@ -62,16 +62,26 @@ class my_downloader:
             for file_segment in file_segments_list:
                 my_file_tools.delete_file(file_segment)
 
-    def download(self, url: str, tmp_dir: str, target_dir: str, file_name: str, left_point: int, right_point: int, proxies: dict = None) -> None:
+    def download(self, 
+                 url: str, 
+                 tmp_dir: str, 
+                 target_dir: str, 
+                 file_name: str, 
+                 left_point: int, 
+                 right_point: int, 
+                 thread_number: int,
+                 proxies: dict = None
+                ) -> None:
         """
         唯一的对外接口，由distributed-server调用，负责下载文件片段，
         对于该片段，在支持多线程下载时采用多线程下载，不支持时采用单线程下载
         """
         self.url = url
-        self.proxies = proxies
         self.tmp_dir = tmp_dir
         self.target_dir = target_dir
         self.file_name = file_name
+        self.thread_number = thread_number
+        self.proxies = proxies
         if my_requests.partial_supported(url, proxies) == True:
             # 多线程下载
             download_interval_list = my_distributer.download_interval_for_threads(
