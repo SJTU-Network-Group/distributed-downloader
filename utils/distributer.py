@@ -7,7 +7,7 @@ class my_distributer:
         pass
 
     @staticmethod
-    def download_interval_for_threads(left_point, right_point, thread_number) -> list[list]:
+    def download_interval_for_threads(left_point: int, right_point: int, thread_number: int) -> list[list]:
         """
         此函数将[left_point, right_point]区间分为thread_number块，并返回list[thread_number][2]
         """
