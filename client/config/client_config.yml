@@ -5,4 +5,6 @@ CLIENT_TRACKER_BIND_PORT: 8000
 TEMP_DIR: './distributed_downloader_client_temp'
 THREADS: 4
 PROXY:
-DOWNLOAD_DIR:
+  HTTP:
+  HTTPS:
+DOWNLOAD_DIR: './downloads'
