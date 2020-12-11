@@ -41,7 +41,7 @@ class client_thread(threading.Thread):
               f"connect to server: {self.server_addr_ipv4}:{self.port}...")
         self.socket.connect(self.server_addr_ipv4, self.port)
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
-              f"connect to server: {self.server_addr_ipv4}:{self.port}!")
+              f"connection established")
 
     def send_meta_data(self) -> None:
         download_meta_data = {}
@@ -53,7 +53,7 @@ class client_thread(threading.Thread):
               f"send meta-data to server: {self.server_addr_ipv4}:{self.port}...")
         self.socket.sendall(message)  
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
-              f"meta-data have been sent: {self.server_addr_ipv4}:{self.port}!")
+              f"meta-data has been sent!")
 
     def receive_file_segment(self, file_path: str) -> None:
         file_size = self.download_interval[1] - self.download_interval[0] + 1
@@ -66,13 +66,13 @@ class client_thread(threading.Thread):
                 wf.write(data_block)
                 file_size -= len(data_block)
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
-              f"file segment have been received from: {self.server_addr_ipv4}:{self.port}!")
+              f"file segment has been received!")
 
     def close_connection(self) -> None:
         print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
-              f"disconnect to : {self.server_addr_ipv4}:{self.port}!")
+              f"disconnect from: {self.server_addr_ipv4}:{self.port}...")
         self.socket.shutdown(socket.SHUT_RDWR)
         self.socket.close()
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
-              f"disconnect to : {self.server_addr_ipv4}:{self.port}!")
+              f"disconnected")
 

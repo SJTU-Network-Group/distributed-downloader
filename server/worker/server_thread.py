@@ -75,13 +75,15 @@ class server_thread(threading.Thread):
               "file segment has been downloaded!")
 
     def send_file_segment(self):
+        print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
+              f"send file segment to client: {self.client_addr_tuple[0]}:{str(self.client_addr_tuple[1])}...")
         with open(self.file_path, mode='rb') as rf:
             buffer = rf.read(2048)
             while buffer:
                 self.socket.sendall(buffer)
                 buffer = rf.read(2048)
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
-              f"file segment sent to client: {self.client_addr_tuple[0]}:{str(self.client_addr_tuple[1])}!")
+              f"file segment has been sent!")
 
     def close_connection(self) -> None:
         print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
@@ -89,7 +91,7 @@ class server_thread(threading.Thread):
         self.socket.shutdown(socket.SHUT_RDWR)
         self.socket.close()
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
-              f"disconnect to: {self.client_addr_tuple[0]}:{str(self.client_addr_tuple[1])}")
+              f"disconnected")
 
     def delete_file(self) -> None:
         print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
