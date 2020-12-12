@@ -37,7 +37,7 @@ class ClientThread(threading.Thread):
         # 开始接受文件
         self.receive_file_segment(self.file_path)
         # 文件接收完成，关闭socket
-        self.close_connection()
+        self.disconnect()
 
     def connect_to_server(self) -> None:
         print(Fore.YELLOW, f"\nthread-{str(self.thread_id)} trying -> ", Style.RESET_ALL,
@@ -53,7 +53,7 @@ class ClientThread(threading.Thread):
         print(Fore.YELLOW, f"\nthread-{str(self.thread_id)} trying -> ", Style.RESET_ALL,
               f"send meta-data to server: {self.server_addr_tuple[0]}:{str(self.server_addr_tuple[1])}...")
         self.socket.sendall(message)  
-        print(Fore.GREEN, "thread-{str(self.thread_id)} succeed -> ", Style.RESET_ALL,
+        print(Fore.GREEN, f"thread-{str(self.thread_id)} succeed -> ", Style.RESET_ALL,
               "meta-data has been sent!")
 
     def receive_file_segment(self, file_path: str) -> None:
@@ -69,7 +69,7 @@ class ClientThread(threading.Thread):
         print(Fore.GREEN, f"thread-{str(self.thread_id)} succeed -> ", Style.RESET_ALL,
               "file segment has been received!")
 
-    def close_connection(self) -> None:
+    def disconnect(self) -> None:
         print(Fore.YELLOW, f"\nthread-{str(self.thread_id)} trying -> ", Style.RESET_ALL,
               f"disconnect from: {self.server_addr_tuple[0]}:{str(self.server_addr_tuple[1])}...")
         self.socket.shutdown(socket.SHUT_RDWR)

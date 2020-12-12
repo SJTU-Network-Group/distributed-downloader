@@ -36,7 +36,7 @@ class ServerThread(threading.Thread):
         # 下载完成，开始传输文件到client
         self.send_file_segment()
         # 关闭socket
-        self.close_connection()
+        self.disconnect()
         # 删除文件
         self.delete_file()
 
@@ -86,7 +86,7 @@ class ServerThread(threading.Thread):
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
               f"file segment has been sent!")
 
-    def close_connection(self) -> None:
+    def disconnect(self) -> None:
         print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
               f"disconnect from: {self.client_addr_tuple[0]}:{str(self.client_addr_tuple[1])}...")
         self.socket.shutdown(socket.SHUT_RDWR)
