@@ -1,4 +1,3 @@
-#TODO: finish this file
 import sys
 from utils.file_tools import MyFileTools
 from server.worker.server_daemon import ServerDaemon
@@ -7,7 +6,7 @@ from colorama import Fore, Style
 import socket
 
 
-def create_work_dir(config) -> None:
+def create_work_dir() -> None:
     """
     This function is aimed to create some useful dir for working.
     """
@@ -28,7 +27,7 @@ def create_work_dir(config) -> None:
 if __name__ == "__main__":
     with open('./config/server_config.yml', 'rt') as rf:
         config = yaml.load(rf, yaml.FullLoader)
-    create_work_dir(config=config)
+    create_work_dir()
     server_addr_ipv4 = [l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2]
                                      if not ip.startswith("127.")][:1],
                                     [[(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close())
@@ -38,11 +37,4 @@ if __name__ == "__main__":
                           tmp_dir=config['TMP_DIR'], target_dir=config['TARGET_DIR'], proxies=config['PROXIES'])
     server.tell_manager_server_up(config['MANAGER_ADDR_IPV4'], config['MANAGER_PORT'])
     server.listen_for_client()
-    #TODO: user gives instruciton to jump this listen loop.
-
-
-
-
-
-
-
+    # TODO: user gives instruction to jump this listen loop.
