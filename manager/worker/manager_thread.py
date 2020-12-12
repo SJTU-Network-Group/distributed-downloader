@@ -6,9 +6,9 @@ from colorama import Fore, Style
 
 class ManagerThread(threading.Thread):
     def __init__(self,
-                 server_list: list[[str, int]],   # 跨线程变量：server_list, 维护了可用的server的地址list
+                 server_list: list,   # 跨线程变量：server_list, 维护了可用的server的地址list
                  conn_socket: socket.socket,
-                 conn_addr_tuple: tuple[str, int],
+                 conn_addr_tuple: tuple,
                  mutex: threading.Lock            # 互斥锁，用于确保对server_list访问的线程安全
                  ) -> None:
         threading.Thread.__init__(self)
@@ -39,11 +39,14 @@ class ManagerThread(threading.Thread):
               f"add server: {self.conn_addr_tuple[0]}:{str(self.conn_addr_tuple[1])}")
 
     def rm_server(self) -> None:
+        self.conn_socket.sendall("go_ahead".encode())
+        target_tuple: bytes = self.conn_socket.recv(2048)
+        target_tuple: tuple = eval(target_tuple.decode())
         self.mutex.acquire(timeout=5)
-        self.server_list.remove(list(self.conn_addr_tuple))
+        self.server_list.remove(list(target_tuple))
         self.mutex.release()
         print(Fore.GREEN, f"ManagerThread-{str(self.thread_id)} succeed -> ", Style.RESET_ALL,
-              f"remove server: {self.conn_addr_tuple[0]}:{str(self.conn_addr_tuple[1])}")
+              f"remove server: {target_tuple[0]}:{str(target_tuple[1])}")
 
     def send_server_list(self) -> None:
         self.mutex.acquire(timeout=5)
@@ -58,5 +61,5 @@ class ManagerThread(threading.Thread):
               f"server_list sent to: {self.conn_addr_tuple[0]}:{str(self.conn_addr_tuple[1])}...")
         self.conn_socket.shutdown(socket.SHUT_RDWR)
         self.conn_socket.close()
-        print(Fore.GREEN, f"thread-{str(self.thread_id)} succeed -> ", Style.RESET_ALL,
+        print(Fore.GREEN, f"ManagerThread-{str(self.thread_id)} succeed -> ", Style.RESET_ALL,
               "disconnected")

@@ -43,7 +43,7 @@ class ServerThread(threading.Thread):
     def receive_meta_data(self) -> None:
         print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
               f"receive meta-data from: {self.client_addr_tuple[0]}:{str(self.client_addr_tuple[1])}...")
-        self.meta_data: bytes = self.socket.recv(bufsize=4096)
+        self.meta_data: bytes = self.socket.recv(4096)
         self.meta_data: str = self.meta_data.decode()
         self.meta_data: dict = eval(self.meta_data)
         if not ('url' in self.meta_data and 'download_interval' in self.meta_data):

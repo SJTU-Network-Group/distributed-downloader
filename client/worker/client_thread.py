@@ -12,7 +12,7 @@ class ClientThread(threading.Thread):
                  thread_id: int,                  # 用于在区分不同的线程的输出
                  url: str,                        # 下载链接
                  server_addr_tuple: tuple,        # 此thread连接的server的(ipv4地址:str, port:int)
-                 download_interval: list[int],    # 此thread请求的片段文件在http(s)响应体中的的比特区间
+                 download_interval: list,    # 此thread请求的片段文件在http(s)响应体中的的比特区间
                  file_path: str,                  # 下载好的(片段)文件存储`地址/名称`
                  client_addr_ipv4: str,           # client的ipv4地址
                  to_server_port: int              # client的socket端口

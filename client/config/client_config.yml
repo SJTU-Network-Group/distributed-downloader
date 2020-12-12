@@ -1,10 +1,9 @@
 TO_SERVER_PORT: 8000
 MANAGER_PORT: 5000
-MANAGER_ADDR_IPV4: '127.0.0.1'
+MANAGER_ADDR_IPV4: '192.168.3.4'
 TO_MANAGER_PORT: 8000
-TMP_DIR: './distributed_downloader_client_temp/'
-THREADS_NUM: 4
+TMP_DIR: './ddr-download/client/tmp/'
 PROXIES:
   HTTP:
   HTTPS:
-TARGET_DIR: './downloads/'
+TARGET_DIR: './ddr-download/client/target/'

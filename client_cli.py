@@ -29,7 +29,7 @@ def create_work_dir(config) -> None:
 
 
 if __name__ == '__main__':
-    with open('../config/client_config.yml', 'r') as f:
+    with open('./client/config/client_config.yml', 'r') as f:
         config = yaml.load(f, yaml.FullLoader)
     create_work_dir(config=config)
 
@@ -40,10 +40,20 @@ if __name__ == '__main__':
                                     [[(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close())
                                       for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) if l][0][0]
     filename = os.path.basename(url.replace("%20", "_"))
+    # TODO: change filename to the real file type (ref: requests.header)
 
-    client = ClientDaemon(url=url, client_addr_ipv4=client_addr_ipv4, to_server_port=config['TO_SERVER_PORT'],
-                          to_manager_port=config['TO_MANAGER_PORT'], final_file_path=config['TARGET_DIR'] + filename,
-                          tmp_dir=config['TMP_DIR'], proxies=config['PROXIES'])
+    client = ClientDaemon(url=url,
+                          client_addr_ipv4=client_addr_ipv4,
+                          to_server_port=config['TO_SERVER_PORT'],
+                          to_manager_port=config['TO_MANAGER_PORT'],
+                          final_file_path=config['TARGET_DIR'] + filename,
+                          tmp_dir=config['TMP_DIR'],
+                          proxies=config['PROXIES']
+                          )
     client.ask_manager_for_server_list(manager_addr_ipv4=config['MANAGER_ADDR_IPV4'], manager_port=config['MANAGER_PORT'])
 
     client.connect_to_servers_and_download()
+
+    print("to delete")
+    MyFileTools.rm_dir(config['TMP_DIR'])
+    print("deleted")

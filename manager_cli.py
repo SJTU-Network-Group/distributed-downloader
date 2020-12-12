@@ -9,7 +9,7 @@ import socket
 
 
 if __name__ == "__main__":
-    with open('./config/manager_config.yml', 'r') as f:
+    with open('manager/config/manager_config.yml', 'r') as f:
         config = yaml.load(f, yaml.FullLoader)
     manager_addr_ipv4 = [l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2]
                                      if not ip.startswith("127.")][:1],

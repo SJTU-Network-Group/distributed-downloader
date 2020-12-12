@@ -84,7 +84,10 @@ class ServerDaemon:
         # 初始化连接到manager的socket
         to_manager_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         to_manager_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        to_manager_socket.bind((self.server_addr_ipv4, self.to_client_port))
+        try:
+            to_manager_socket.bind((self.server_addr_ipv4, self.to_client_port))
+        except:
+            pass
 
         # 连接到manager
         print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
@@ -98,6 +101,11 @@ class ServerDaemon:
               f"send 'server down' to manager: {manager_addr_ipv4}:{str(manager_port)}...")
         to_manager_socket.sendall("server_down".encode())
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL, "sent")
+
+        #
+        msg = to_manager_socket.recv(2048).decode()
+        if msg == 'go_ahead':
+            to_manager_socket.sendall(str((self.server_addr_ipv4, self.to_client_port)).encode())
 
         # 消息发送完成，关闭连接，销毁socket
         print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,

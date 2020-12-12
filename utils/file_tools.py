@@ -11,7 +11,7 @@ class MyFileTools:
         pass
 
     @staticmethod
-    def append_file(src_path_list: list[str], tar_path: str) -> None:
+    def append_file(src_path_list: list, tar_path: str) -> None:
         # 以二进制的形式将src_path_list的内容逐一追加到tar_path末尾
         with open(tar_path, mode='wb') as wf:
             for src_path in src_path_list:
@@ -26,3 +26,8 @@ class MyFileTools:
     def create_dir(dirname: str):
         if not os.path.exists(dirname):
             os.makedirs(dirname)
+
+    @staticmethod
+    def rm_dir(dirname: str):
+        if not os.path.exists(dirname):
+            os.rmdir(dirname)

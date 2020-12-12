@@ -7,7 +7,7 @@ class MyDistributor:
         pass
 
     @staticmethod
-    def download_interval_list(left_point: int, right_point: int, number_of_parts: int) -> list[list]:
+    def download_interval_list(left_point: int, right_point: int, number_of_parts: int) -> list:
         """
         此函数将[left_point, right_point]区间分为number_of_parts块，并返回list[number_of_parts][2]
         """

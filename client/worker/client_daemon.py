@@ -63,9 +63,9 @@ class ClientDaemon:
         # 接收server_list
         print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
               f"receive server_list from manager: {manager_addr_ipv4}:{str(manager_port)}...")
-        self.server_list: bytes = to_manager_socket.recv(bufsize=4096)
+        self.server_list: bytes = to_manager_socket.recv(4096)
         self.server_list: str = self.server_list.decode()
-        self.server_list: list[tuple] = eval(self.server_list)
+        self.server_list: list = eval(self.server_list)
         if not self.server_list:
             print(Fore.RED, "warning -> ",
                   Style.RESET_ALL, "server_list is None")
@@ -97,7 +97,7 @@ class ClientDaemon:
             _client_thread = ClientThread(
                 index,
                 self.url,
-                server_addr_tuple,
+                tuple(server_addr_tuple),
                 download_interval,
                 self.tmp_dir + 'segment_' + str(index),
                 self.client_addr_ipv4,
@@ -127,7 +127,7 @@ class ClientDaemon:
         print(Fore.GREEN, f"\nclient daemon succeed -> ", Style.RESET_ALL,
               "file segments have been merged")
 
-    def _get_download_interval_for_servers(self) -> list[list[int]]:
+    def _get_download_interval_for_servers(self) -> list:
         resp = MyRequests.request(url=self.url, proxies=self.proxies)
         file_size = int(resp.headers['Content-Length'])
         download_interval_list = MyDistributor.download_interval_list(

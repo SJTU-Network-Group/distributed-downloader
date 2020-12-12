@@ -21,6 +21,8 @@ class MyDownloader:
         工具函数（不对外暴露）
         负责单线程下载，用于多线程下载不被支持时
         """
+        print(Fore.RED, "Multi-threaded downloading is not supported by ",
+              self.url, ".\nDownloading will be single-threaded.", Style.RESET_ALL)
         MyRequests.partial_request(url=self.url,
                                    left_point=self.left_point,
                                    right_point=self.right_point,
@@ -32,8 +34,11 @@ class MyDownloader:
         工具函数（不对外暴露）
         负责多线程下载, 第i个线程下载的文件为`${tmp_dir}segment_by_thread_${i}`
         """
+        print(Fore.YELLOW, "trying -> ", Style.RESET_ALL,
+              f"multi-threaded download ->  [{self.left_point}B,{self.right_point}B] from: {self.url}...")
         for thread_id in range(self.thread_number):
             t = threading.Thread(target=MyRequests.partial_request,
+                                 name='downloader-thread-'+str(thread_id),
                                  kwargs={
                                      'url': self.url,
                                      'proxies': self.proxies,
@@ -46,10 +51,11 @@ class MyDownloader:
                                  })
             t.setDaemon(True)
             t.start()
-        main_thread = threading.current_thread()
+        name_list = ['downloader-thread-'+str(thread_id) for thread_id in range(self.thread_number)]
         for each in threading.enumerate():
-            if each is main_thread:
+            if each.name not in name_list:
                 continue
+            print(str(each.name) + '\n')
             each.join()
 
     def _merge_file_segments(self) -> None:
@@ -93,6 +99,4 @@ class MyDownloader:
             self._merge_file_segments()
         else:
             # 单线程下载
-            print(Fore.RED, "Multi-threaded downloading is not supported by ",
-                  url, ".\nDownloading will be single-threaded.", Style.RESET_ALL)
             self._single_thread_download()
