@@ -3,25 +3,22 @@ import sys
 import os
 from utils.file_tools import MyFileTools
 from client.worker.client_daemon import ClientDaemon
-from utils.requests import MyRequests
 from colorama import Fore, Style
 import socket
-from utils.downloader import MyDownloader
 
 
-def create_work_dir(config) -> None:
+def create_work_dir() -> None:
     """
     This function is aimed to create some useful dir for working.
     """
-    file_tools = MyFileTools()
     if config['TARGET_DIR'] is not None:
-        file_tools.create_dir(config['TARGET_DIR'])
+        MyFileTools.create_dir(config['TARGET_DIR'])
     else:
         print(Fore.RED, "error -> ", Style.RESET_ALL,
               "please give download path in config file.")
         sys.exit(1)
     if config['TMP_DIR'] is not None:
-        file_tools.create_dir(config['TMP_DIR'])
+        MyFileTools.create_dir(config['TMP_DIR'])
     else:
         print(Fore.RED, "error -> ", Style.RESET_ALL,
               "please give temp path in config file.")
@@ -29,9 +26,9 @@ def create_work_dir(config) -> None:
 
 
 if __name__ == '__main__':
-    with open('./client/config/client_config.yml', 'r') as f:
-        config = yaml.load(f, yaml.FullLoader)
-    create_work_dir(config=config)
+    with open('../config/client_config.yml', 'rt') as rf:
+        config = yaml.load(rf, yaml.FullLoader)
+    create_work_dir()
 
     assert len(sys.argv) >= 2, 'must give urls that need to download.'
     url = sys.argv[1]
