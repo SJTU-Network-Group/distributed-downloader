@@ -5,34 +5,45 @@ from utils.file_tools import MyFileTools
 from client.worker.client_daemon import ClientDaemon
 from utils.requests import MyRequests
 from colorama import Fore, Style
+import socket
 from utils.downloader import MyDownloader
+
+
+def create_work_dir(config) -> None:
+    """
+    This function is aimed to create some useful dir for working.
+    """
+    file_tools = MyFileTools()
+    if config['TARGET_DIR'] is not None:
+        file_tools.create_dir(config['TARGET_DIR'])
+    else:
+        print(Fore.RED, "error -> ", Style.RESET_ALL,
+              "please give download path in config file.")
+        sys.exit(1)
+    if config['TMP_DIR'] is not None:
+        file_tools.create_dir(config['TMP_DIR'])
+    else:
+        print(Fore.RED, "error -> ", Style.RESET_ALL,
+              "please give temp path in config file.")
+        sys.exit(1)
 
 
 if __name__ == '__main__':
     with open('../config/client_config.yml', 'r') as f:
         config = yaml.load(f, yaml.FullLoader)
-    file_tools = MyFileTools()
-    file_tools.create_dir(config['TEMP_DIR'])
-    if config['DOWNLOAD_DIR'] is not None:
-        file_tools.create_dir(config['DOWNLOAD_DIR'])
-    else:
-        print(Fore.RED, "error -> ", Style.RESET_ALL,
-              "please give download path in config file.")
+    create_work_dir(config=config)
+
     assert len(sys.argv) >= 2, 'must give urls that need to download.'
     url = sys.argv[1]
-    client = ClientDaemon(url)
-    client.fetch_server_list((config['TRACKER_HOST'], config['TRACKER_PORT']), config['CLIENT_TRACKER_BIND_PORT'])
-
-    request = MyRequests()
-    response = request.request(url=url, proxies=config['PROXY'])
-    request.close_request(response)
-
-    filesize = int(response.headers['Content-Length'])
+    client_addr_ipv4 = [l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2]
+                                     if not ip.startswith("127.")][:1],
+                                    [[(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close())
+                                      for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) if l][0][0]
     filename = os.path.basename(url.replace("%20", "_"))
-    filepath = os.path.join(config['DOWNLOAD_DIR'], filename)
 
-    if response.headers['Accept-Ranges'] != 'bytes':
-        print(Fore.RED, "error -> ", Style.RESET_ALL,
-              "This download URL does not support range download! Using single thread download on client machine.")
+    client = ClientDaemon(url=url, client_addr_ipv4=client_addr_ipv4, to_server_port=config['TO_SERVER_PORT'],
+                          to_manager_port=config['TO_MANAGER_PORT'], final_file_path=config['TARGET_DIR'] + filename,
+                          tmp_dir=config['TMP_DIR'], proxies=config['PROXIES'])
+    client.ask_manager_for_server_list(manager_addr_ipv4=config['MANAGER_ADDR_IPV4'], manager_port=config['MANAGER_PORT'])
 
-
+    client.connect_to_servers_and_download()
