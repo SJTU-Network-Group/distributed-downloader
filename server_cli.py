@@ -25,7 +25,7 @@ def create_work_dir() -> None:
 
 
 if __name__ == "__main__":
-    with open('./config/server_config.yml', 'rt') as rf:
+    with open('./server/config/server_config.yml', 'rt') as rf:
         config = yaml.load(rf, yaml.FullLoader)
     create_work_dir()
     server_addr_ipv4 = [l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2]

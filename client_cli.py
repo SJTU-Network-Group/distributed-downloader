@@ -26,7 +26,7 @@ def create_work_dir() -> None:
 
 
 if __name__ == '__main__':
-    with open('../config/client_config.yml', 'rt') as rf:
+    with open('./client/config/client_config.yml', 'rt') as rf:
         config = yaml.load(rf, yaml.FullLoader)
     create_work_dir()
 

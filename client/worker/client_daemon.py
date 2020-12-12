@@ -128,11 +128,15 @@ class ClientDaemon:
               "file segments have been merged")
 
     def _get_download_interval_for_servers(self) -> list:
-        resp = MyRequests.request(url=self.url, proxies=self.proxies)
+        print(Fore.YELLOW, f"client daemon trying -> ", Style.RESET_ALL,
+              "get download intervals for servers...")
+        resp = MyRequests.head(url=self.url, proxies=self.proxies)
         file_size = int(resp.headers['Content-Length'])
         download_interval_list = MyDistributor.download_interval_list(
             left_point=0,
             right_point=file_size - 1,
             number_of_parts=len(self.server_list)
         )
+        print(Fore.GREEN, f"client daemon succeed -> ", Style.RESET_ALL,
+              "have gotten download intervals for servers")
         return download_interval_list
