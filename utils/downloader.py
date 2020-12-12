@@ -2,7 +2,7 @@ import threading
 from colorama import Fore, Style  # 骚气的输出，用来强调warning信息
 from utils.requests import MyRequests
 from utils.file_tools import MyFileTools
-from utils.distributer import MyDistributor
+from utils.distributor import MyDistributor
 
 
 class MyDownloader:
