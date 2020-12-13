@@ -34,8 +34,12 @@ class ManagerThread(threading.Thread):
         self.disconnect()
 
     def add_server(self) -> None:
+        self.conn_socket.sendall("go_ahead".encode())
+        target_tuple: bytes = self.conn_socket.recv(2048)
+        target_tuple: tuple = eval(target_tuple.decode())
         self.mutex.acquire(timeout=5)
-        self.server_list.append(list(self.conn_addr_tuple))
+        # self.server_list.append(list(self.conn_addr_tuple))
+        self.server_list.append(list(target_tuple))
         self.mutex.release()
         print(Fore.GREEN, f"ManagerThread-{str(self.thread_id)} succeed -> ", Style.RESET_ALL,
               f"add server: {self.conn_addr_tuple[0]}:{str(self.conn_addr_tuple[1])}")
@@ -45,7 +49,10 @@ class ManagerThread(threading.Thread):
         target_tuple: bytes = self.conn_socket.recv(2048)
         target_tuple: tuple = eval(target_tuple.decode())
         self.mutex.acquire(timeout=5)
-        self.server_list.remove(list(target_tuple))
+        try:
+            self.server_list.remove(list(target_tuple))
+        except:
+            pass
         self.mutex.release()
         print(Fore.GREEN, f"ManagerThread-{str(self.thread_id)} succeed -> ", Style.RESET_ALL,
               f"remove server: {target_tuple[0]}:{str(target_tuple[1])}")

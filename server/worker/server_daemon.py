@@ -69,6 +69,11 @@ class ServerDaemon:
         to_manager_socket.sendall("server_up".encode())
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL, "sent")
 
+        # 发送自己的面向client的连接地址
+        msg = to_manager_socket.recv(2048).decode()
+        if msg == 'go_ahead':
+            to_manager_socket.sendall(str((self.server_addr_ipv4, self.to_client_port)).encode())
+
         # 消息发送完成，关闭连接，销毁socket
         print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
               f"disconnect from: {manager_addr_ipv4}:{str(manager_port)}...")
@@ -102,7 +107,7 @@ class ServerDaemon:
         to_manager_socket.sendall("server_down".encode())
         print(Fore.GREEN, "succeed -> ", Style.RESET_ALL, "sent")
 
-        #
+        # 发送自己的面向client的连接地址
         msg = to_manager_socket.recv(2048).decode()
         if msg == 'go_ahead':
             to_manager_socket.sendall(str((self.server_addr_ipv4, self.to_client_port)).encode())
