@@ -10,6 +10,10 @@ First of all, you should satisfy the following requirement:
 and then you can install other dependency by running:
 > pip3 install -r requirements.txt
 
+and to run server, client and manager instance properly, you need to follow our examples *client/config/client_config_example.yml*, 
+*server/config/server_config_example.yml* and *manager/config/manager_config_example.yml* to create your own config files *client_config.yml*, 
+*server_config.yml* and *manager_config.yml* under the same directory.
+
 Second, you must start a manager instance on the manager machine by running:
 > python manager_cli,py
 
