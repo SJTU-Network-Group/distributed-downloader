@@ -5,7 +5,7 @@ The design principle and detailed architecture you can refer to our paper.
 
 ## How to use
 First of all, you should satisfy the following requirement:
-> python >= 3.9
+> python >= 3.6
 
 and then you can install other dependency by running:
 > pip3 install -r requirements.txt
