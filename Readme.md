@@ -1,3 +1,4 @@
+![image](https://github.com/SJTU-Network-Group/distributed-downloader/ReadmeFig/logo.png)
 # SJTU-CS339-Teamwork-Distributed-Downloader
 This repository contains the code of our CS339 Computer Network's team project Distributed Downloader. 
 Here we will give you a simple example to show you how to use the repository to accelerate your download through a distributed way. 
