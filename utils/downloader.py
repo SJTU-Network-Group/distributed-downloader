@@ -55,7 +55,6 @@ class MyDownloader:
         for each in threading.enumerate():
             if each.name not in name_list:
                 continue
-            print(str(each.name) + '\n')
             each.join()
 
     def _merge_file_segments(self) -> None:

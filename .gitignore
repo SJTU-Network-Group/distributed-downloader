@@ -1,3 +1,8 @@
 /test
 /ddr-download
-*.yml
+client/worker/__pycache__
+manager/worker/__pycache__
+client/config/client_config.yml
+manager/config/manager_config.yml
+server/config/server_config.yml
+server/worker/__pycache__

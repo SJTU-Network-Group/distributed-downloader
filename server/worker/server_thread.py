@@ -72,31 +72,31 @@ class ServerThread(threading.Thread):
                                 thread_number=self.thread_number,
                                 proxies=self.proxies
                                 )
-        print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
-              "file segment has been downloaded!")
+        # print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
+        #     "file segment has been downloaded!")
 
     def send_file_segment(self):
-        print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
-              f"send file segment to client: {self.client_addr_tuple[0]}:{str(self.client_addr_tuple[1])}...")
+        # print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
+        #   f"send file segment to client: {self.client_addr_tuple[0]}:{str(self.client_addr_tuple[1])}...")
         with open(self.file_path, mode='rb') as rf:
             buffer = rf.read(2048)
             while buffer:
                 self.socket.sendall(buffer)
                 buffer = rf.read(2048)
-        print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
-              f"file segment has been sent!")
+        # print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
+        #   f"file segment has been sent!")
 
     def disconnect(self) -> None:
-        print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
-              f"disconnect from: {self.client_addr_tuple[0]}:{str(self.client_addr_tuple[1])}...")
+        # print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
+        #       f"disconnect from: {self.client_addr_tuple[0]}:{str(self.client_addr_tuple[1])}...")
         self.socket.shutdown(socket.SHUT_RDWR)
         self.socket.close()
-        print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
-              f"disconnected")
+        # print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
+        #       f"disconnected")
 
     def delete_file(self) -> None:
-        print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
-              f"delete file segment: {self.file_path}...")
+        # print(Fore.YELLOW, "\ntrying -> ", Style.RESET_ALL,
+        #       f"delete file segment: {self.file_path}...")
         MyFileTools.delete_file(self.file_path)
-        print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
-              "file segment has been deleted")
+        # print(Fore.GREEN, "succeed -> ", Style.RESET_ALL,
+        #       "file segment has been deleted")

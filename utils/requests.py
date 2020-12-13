@@ -47,13 +47,16 @@ class MyRequests:
                                     'Range': 'bytes=%d-%d' % (left_point, right_point)},
                                 stream=True  # 分块写入，防止大文件下载导致内存溢出
                                 )
-        bar = tqdm(total=right_point - left_point + 1)
+        bar = tqdm(total=(right_point - left_point + 1))
+        bar.unit = 'B'
+        bar.unit_scale = True
         with open(file_path, mode='wb') as wf:
             for chunk in resp.iter_content(chunk_size=5120):
                 bar.update(len(chunk))
                 if chunk:
                     wf.write(chunk)
         resp.close()
+        bar.close()
         #print(Fore.GREEN, f"multi-threaded downloader-{str(threading.current_thread().ident)}  succeed -> ",
         #      Style.RESET_ALL,
         #      f"download file segment  [{left_point}B,{right_point}B] from: {url}...")
