@@ -55,6 +55,7 @@ if __name__ == '__main__':
     end_time = time.time()
     fsize = os.path.getsize(config['TARGET_DIR'] + filename)
     fsize = fsize/float(1024*1024)
-    print(Fore.CYAN, f"\n\ndownload speed = {str(fsize/(end_time - start_time))}")
+    print(Fore.CYAN, f"\n\ndownload speed = {str(fsize/(end_time - start_time))}MB/s")
+    print(f"time = {end_time - start_time}s", Style.RESET_ALL)
 
     MyFileTools.rm_dir(config['TMP_DIR'])
