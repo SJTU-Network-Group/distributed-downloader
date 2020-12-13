@@ -1,5 +1,6 @@
 import socket
 import threading
+from pprint import pprint
 from copy import deepcopy
 from colorama import Fore, Style
 
@@ -29,6 +30,7 @@ class ManagerThread(threading.Thread):
         else:
             print(Fore.RED, f"ManagerThread-{str(self.thread_id)} warning -> ", Style.RESET_ALL,
                   f"meaningless message from: {self.conn_addr_tuple[0]}:{str(self.conn_addr_tuple[1])}")
+        self.print_server_list()
         self.disconnect()
 
     def add_server(self) -> None:
@@ -56,10 +58,14 @@ class ManagerThread(threading.Thread):
         print(Fore.GREEN, f"ManagerThread-{str(self.thread_id)} succeed -> ", Style.RESET_ALL,
               f"server_list sent to: {self.conn_addr_tuple[0]}:{str(self.conn_addr_tuple[1])}")
 
+
+    def print_server_list(self) -> None:
+        self.mutex.acquire(timeout=5)
+        pprint(self.server_list)
+        self.mutex.release()
+
     def disconnect(self) -> None:
-        print(Fore.YELLOW, f"ManagerThread-{str(self.thread_id)} trying -> ", Style.RESET_ALL,
-              f"server_list sent to: {self.conn_addr_tuple[0]}:{str(self.conn_addr_tuple[1])}...")
         self.conn_socket.shutdown(socket.SHUT_RDWR)
         self.conn_socket.close()
         print(Fore.GREEN, f"ManagerThread-{str(self.thread_id)} succeed -> ", Style.RESET_ALL,
-              "disconnected")
+              f"disconnected from: {self.conn_addr_tuple[0]}:{str(self.conn_addr_tuple[1])}")
