@@ -37,8 +37,8 @@ class MyRequests:
         此函数将被多线程执行，负责将${url}的[${left_point}, ${right_point}]比特下载为${file_path}
         """
 
-        print(Fore.YELLOW, f"multi-threaded downloader-{str(threading.current_thread().ident)}  trying -> ", Style.RESET_ALL,
-              f"download file segment  [{left_point}B,{right_point}B] from: {url}...")
+        #print(Fore.YELLOW, f"multi-threaded downloader-{str(threading.current_thread().ident)}  trying -> ", Style.RESET_ALL,
+        #      f"download file segment  [{left_point}B,{right_point}B] from: {url}...")
         resp = requests.request(method="GET",
                                 url=url,
                                 proxies=proxies,
@@ -54,6 +54,6 @@ class MyRequests:
                 if chunk:
                     wf.write(chunk)
         resp.close()
-        print(Fore.GREEN, f"multi-threaded downloader-{str(threading.current_thread().ident)}  succeed -> ",
-              Style.RESET_ALL,
-              f"download file segment  [{left_point}B,{right_point}B] from: {url}...")
+        #print(Fore.GREEN, f"multi-threaded downloader-{str(threading.current_thread().ident)}  succeed -> ",
+        #      Style.RESET_ALL,
+        #      f"download file segment  [{left_point}B,{right_point}B] from: {url}...")

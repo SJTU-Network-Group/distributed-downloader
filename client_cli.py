@@ -1,6 +1,7 @@
 import yaml
 import sys
 import os
+import time 
 from utils.file_tools import MyFileTools
 from client.worker.client_daemon import ClientDaemon
 from colorama import Fore, Style
@@ -49,8 +50,11 @@ if __name__ == '__main__':
                           )
     client.ask_manager_for_server_list(manager_addr_ipv4=config['MANAGER_ADDR_IPV4'], manager_port=config['MANAGER_PORT'])
 
+    start_time = time.time()
     client.connect_to_servers_and_download()
+    end_time = time.time()
+    fsize = os.path.getsize(config['TARGET_DIR'] + filename)
+    fsize = fsize/float(1024*1024)
+    print(Fore.CYAN, f"\n\ndownload speed = {str(fsize/(end_time - start_time))}")
 
-    print("to delete")
     MyFileTools.rm_dir(config['TMP_DIR'])
-    print("deleted")
